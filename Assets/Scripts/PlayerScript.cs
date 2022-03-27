@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    
     public float movementSpeed = 10f;
     public float jumpHeight = 5f;
     public float gravityForce = -9.81f;
@@ -16,15 +15,18 @@ public class PlayerScript : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
     
-    // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+		UpdatePlayerMovement();
+    }
+
+	private void UpdatePlayerMovement() 
+	{
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0f)
         {
@@ -45,5 +47,5 @@ public class PlayerScript : MonoBehaviour
         
         velocity.y += gravityForce * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
-    }
+	}
 }
