@@ -9,7 +9,7 @@ public class CompanionScript : InteractableObject
 
     public override string GetDescription()
     {
-        if (!dialogueBox.gameObject.activeSelf) return $"Press [{key}] to talk to {companionName}";
+        if (!dialogueBox.gameObject.activeSelf) return $"Press [{key}] to open {companionName}";
         return "";
     }
     
