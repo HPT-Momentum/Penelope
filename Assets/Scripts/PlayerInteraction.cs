@@ -43,7 +43,7 @@ public class PlayerInteraction: MonoBehaviour {
             case InteractableObject.InteractionType.Click:
                 // interaction type is click and we clicked the button -> interact
                 if (Input.GetKeyDown(interactableObj.key)) {
-                    interactableObj.OnInteract();
+                    interactableObj.OnInteract(this.GetComponentInParent<GameObject>());
                 }
                 break;
             

@@ -15,7 +15,7 @@ public abstract class InteractableObject : MonoBehaviour
     public InteractionType interactionType;
 
     public abstract string GetDescription();
-    public abstract void OnInteract();
+    public abstract void OnInteract(GameObject playerObject);
 
     public void IncreaseHoldTime() => holdTime += Time.deltaTime;
     public void ResetHoldTime() => holdTime = 0f;
