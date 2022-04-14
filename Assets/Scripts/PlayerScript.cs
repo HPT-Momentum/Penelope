@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : NetworkBehaviour
 {
     public float movementSpeed = 10f;
     public float jumpHeight = 5f;
@@ -14,18 +15,38 @@ public class PlayerScript : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
+
+    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
     
     void Start()
     {
         controller = GetComponent<CharacterController>();
     }
 
-    void Update()
+    public override void OnNetworkSpawn()
     {
-		UpdatePlayerMovement();
+        if (IsOwner)
+        {
+            Camera cam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+
+            
+            gameObject.GetComponentInChildren<Camera>().enabled = true;
+            controller = GetComponent<CharacterController>();
+            UpdatePlayerMovement();
+        }
     }
 
-	private void UpdatePlayerMovement() 
+    void Update()
+    {
+        if (IsOwner)
+        {
+            UpdatePlayerMovement();
+            if(!NetworkManager.Singleton.IsServer)
+                transform.position = Position.Value;
+        }
+    }
+
+	public void UpdatePlayerMovement() 
 	{
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0f)
@@ -37,8 +58,7 @@ public class PlayerScript : MonoBehaviour
         float y = Input.GetAxis("Vertical");
 
         Vector3 movementDirection = transform.right * x + transform.forward * y;
-
-        controller.Move(movementDirection * movementSpeed * Time.deltaTime);
+        Vector3 playerHorizontalMovement = movementDirection * movementSpeed * Time.deltaTime;
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -46,6 +66,23 @@ public class PlayerScript : MonoBehaviour
         }
         
         velocity.y += gravityForce * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        Vector3 playerVerticalMovement = velocity * Time.deltaTime;
+
+        if (NetworkManager.Singleton.IsServer){
+            controller.Move(playerHorizontalMovement);
+            controller.Move(playerVerticalMovement);
+            Position.Value = controller.transform.position;
+        } else {
+            SubmitPositionRequestServerRpc(playerHorizontalMovement, playerVerticalMovement);
+        }
+        
 	}
+
+    [ServerRpc]
+    void SubmitPositionRequestServerRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ServerRpcParams rpcParams = default)
+    {
+        controller.Move(playerHorizontalMovement);
+        controller.Move(playerVerticalMovement);
+        Position.Value = controller.transform.position;
+    }
 }

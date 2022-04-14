@@ -12,7 +12,7 @@ public class PlayerInteraction: MonoBehaviour {
 
     void Start()
     {
-        cam = Camera.main;
+        cam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
     }
     
     void Update() {
