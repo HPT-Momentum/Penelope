@@ -92,6 +92,7 @@ public class PlayerScript : NetworkBehaviour
     {
         controller.Move(playerHorizontalMovement);
         controller.Move(playerVerticalMovement);
-        Position.Value = controller.transform.position;
+        // Position.Value = controller.transform.position;
+        // NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
     }
 }
