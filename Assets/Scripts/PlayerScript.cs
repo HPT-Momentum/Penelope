@@ -41,8 +41,8 @@ public class PlayerScript : NetworkBehaviour
         if (IsOwner)
         {
             UpdatePlayerMovement();
-            if(!NetworkManager.Singleton.IsServer)
-                transform.position = Position.Value;
+            // if(!NetworkManager.Singleton.IsServer)
+            transform.position = Position.Value;
         }
     }
 
@@ -72,14 +72,23 @@ public class PlayerScript : NetworkBehaviour
             controller.Move(playerHorizontalMovement);
             controller.Move(playerVerticalMovement);
             Position.Value = controller.transform.position;
+            SubmitPositionToClientRpc(playerHorizontalMovement, playerVerticalMovement);
         } else {
-            SubmitPositionRequestServerRpc(playerHorizontalMovement, playerVerticalMovement);
+            SubmitPositionToServerRpc(playerHorizontalMovement, playerVerticalMovement);
         }
         
 	}
 
     [ServerRpc]
-    void SubmitPositionRequestServerRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ServerRpcParams rpcParams = default)
+    void SubmitPositionToServerRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ServerRpcParams rpcParams = default)
+    {
+        controller.Move(playerHorizontalMovement);
+        controller.Move(playerVerticalMovement);
+        Position.Value = controller.transform.position;
+    }
+
+    [ClientRpc]
+    void SubmitPositionToClientRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ClientRpcParams rpcParams = default)
     {
         controller.Move(playerHorizontalMovement);
         controller.Move(playerVerticalMovement);
