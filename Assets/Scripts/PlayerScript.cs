@@ -31,6 +31,10 @@ public class PlayerScript : NetworkBehaviour
             gameObject.GetComponentInChildren<AudioListener>().enabled = true;
             controller = GetComponent<CharacterController>();
             UpdatePlayerMovement();
+
+			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
+			foreach(Waypoint waypoint in waypoints)
+				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
         }
     }
 
