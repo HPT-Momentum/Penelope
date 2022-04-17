@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17316318, g: 0.16457182, b: 0.29665613, a: 1}
+  m_IndirectSpecularColor: {r: 0.1732206, g: 0.1645535, b: 0.29666728, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -506,6 +506,7 @@ GameObject:
   - component: {fileID: 858179915}
   - component: {fileID: 858179916}
   - component: {fileID: 858179917}
+  - component: {fileID: 858179918}
   m_Layer: 0
   m_Name: Dummy1
   m_TagString: Untagged
@@ -556,6 +557,20 @@ MonoBehaviour:
   key: 101
   interactionType: 0
   companionName: Dummy1
+--- !u!114 &858179918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858179914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e424bf6d16e4e38962e5381b5b14ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 0, g: 0.13166761, b: 1, a: 1}
+  image: {fileID: 0}
 --- !u!1 &975344850
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,6 +711,7 @@ GameObject:
   - component: {fileID: 1354046202}
   - component: {fileID: 1354046204}
   - component: {fileID: 1354046203}
+  - component: {fileID: 1354046205}
   m_Layer: 0
   m_Name: Buddy
   m_TagString: Untagged
@@ -746,6 +762,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 4, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1354046205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354046201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e424bf6d16e4e38962e5381b5b14ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.15566039, b: 0.88882744, a: 1}
+  image: {fileID: 0}
 --- !u!1 &1510016881
 GameObject:
   m_ObjectHideFlags: 0
