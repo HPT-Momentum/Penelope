@@ -27,8 +27,11 @@ public class PlayerScript : NetworkBehaviour
     {
         if (IsOwner)
         {
+			// these objects need to be enabled for the specific player object
             gameObject.GetComponentInChildren<Camera>().enabled = true;
             gameObject.GetComponentInChildren<AudioListener>().enabled = true;
+            gameObject.GetComponentInChildren<Canvas>().enabled = true;
+
             controller = GetComponent<CharacterController>();
             UpdatePlayerMovement();
 

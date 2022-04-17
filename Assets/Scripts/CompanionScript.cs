@@ -8,13 +8,12 @@ public class CompanionScript : InteractableObject
 
     public override string GetDescription()
     {
-        // if (!dialogueBox.gameObject.activeSelf) return $"Press [{key}] to talk to {companionName}";
-        return "";
+        return $"Press [{key}] to talk to {companionName}";
     }
     
-    public override void OnInteract(GameObject playerObject)
+    public override void OnInteract(GameObject dialogueBox)
     {
-        if (!playerObject.GetComponent<RectTransform>().gameObject.activeSelf) 
-            playerObject.GetComponent<RectTransform>().GetComponent<DialogueScript>().StartDialogue(companionName);
+        if (!dialogueBox.activeSelf) 
+            dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
     }
 }

@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class PlayerCameraScript : MonoBehaviour
 {
-
     public float mouseSensitivity = 100f;
     public Transform playerObject;
     private float xRotation = 0f;
     
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
+    // updates the camera angle per frame according to the mouse axis'
     void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
