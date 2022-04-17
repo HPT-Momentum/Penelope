@@ -27,10 +27,8 @@ public class PlayerScript : NetworkBehaviour
     {
         if (IsOwner)
         {
-            Camera cam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
-
-            
             gameObject.GetComponentInChildren<Camera>().enabled = true;
+            gameObject.GetComponentInChildren<AudioListener>().enabled = true;
             controller = GetComponent<CharacterController>();
             UpdatePlayerMovement();
         }
@@ -90,9 +88,11 @@ public class PlayerScript : NetworkBehaviour
     [ClientRpc]
     void SubmitPositionToClientRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ClientRpcParams rpcParams = default)
     {
-        controller.Move(playerHorizontalMovement);
-        controller.Move(playerVerticalMovement);
-        // Position.Value = controller.transform.position;
-        // NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
+		if(IsOwner) {
+        	controller.Move(playerHorizontalMovement);
+        	controller.Move(playerVerticalMovement);
+        	//Position.Value = controller.transform.position;
+        	//NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
+		}
     }
 }
