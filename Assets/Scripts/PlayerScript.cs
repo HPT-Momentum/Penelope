@@ -11,29 +11,25 @@ public class PlayerScript : NetworkBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-    
-    private CharacterController controller;
+
+	public GameObject playerCamera;
+	public GameObject playerHUD;
+
+    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+
+    public CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
 
-    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
-    
-    void Start()
-    {
-        controller = GetComponent<CharacterController>();
-    }
+	private bool isMenuOpen = false;
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
 			// these objects need to be enabled for the specific player object
-            gameObject.GetComponentInChildren<Camera>().enabled = true;
-            gameObject.GetComponentInChildren<AudioListener>().enabled = true;
-            gameObject.GetComponentInChildren<Canvas>().enabled = true;
-
-            controller = GetComponent<CharacterController>();
-            UpdatePlayerMovement();
+            playerCamera.SetActive(true);
+            playerHUD.SetActive(true);
 
 			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
 			foreach(Waypoint waypoint in waypoints)
@@ -48,6 +44,17 @@ public class PlayerScript : NetworkBehaviour
             UpdatePlayerMovement();
             // if(!NetworkManager.Singleton.IsServer)
             transform.position = Position.Value;
+
+			if (Input.GetKeyDown(KeyCode.Escape))
+        	{
+				if (!isMenuOpen)
+					GetComponent<PopUpMenu>().Open();
+				else
+					GetComponent<PopUpMenu>().Close();
+
+				isMenuOpen = !isMenuOpen;
+				GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
+			}
         }
     }
 
@@ -74,14 +81,10 @@ public class PlayerScript : NetworkBehaviour
         Vector3 playerVerticalMovement = velocity * Time.deltaTime;
 
         if (NetworkManager.Singleton.IsServer){
-            controller.Move(playerHorizontalMovement);
-            controller.Move(playerVerticalMovement);
-            Position.Value = controller.transform.position;
             SubmitPositionToClientRpc(playerHorizontalMovement, playerVerticalMovement);
         } else {
             SubmitPositionToServerRpc(playerHorizontalMovement, playerVerticalMovement);
         }
-        
 	}
 
     [ServerRpc]
@@ -95,11 +98,9 @@ public class PlayerScript : NetworkBehaviour
     [ClientRpc]
     void SubmitPositionToClientRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ClientRpcParams rpcParams = default)
     {
-		if(IsOwner) {
-        	controller.Move(playerHorizontalMovement);
-        	controller.Move(playerVerticalMovement);
-        	//Position.Value = controller.transform.position;
-        	//NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
-		}
+        controller.Move(playerHorizontalMovement);
+        controller.Move(playerVerticalMovement);
+        Position.Value = controller.transform.position;
+        //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
     }
 }

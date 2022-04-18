@@ -9,15 +9,10 @@ public class PlayerInteraction: MonoBehaviour {
     public TMPro.TextMeshProUGUI interactionText;
 	public GameObject dialogueBox;
 
-    private Camera cam;
-
-    void Start()
-    {
-        cam = gameObject.GetComponentInChildren<Camera>();
-    }
+    public Camera playerCamera;
     
     void Update() {
-        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         RaycastHit hit;
 
         bool successfulHit = false;
