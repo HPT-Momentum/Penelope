@@ -41,24 +41,22 @@ public class PlayerScript : NetworkBehaviour
     {
         if (IsOwner)
         {
-            UpdatePlayerMovement();
-            // if(!NetworkManager.Singleton.IsServer)
+            CalculatePlayerMovement();
             transform.position = Position.Value;
 
 			if (Input.GetKeyDown(KeyCode.Escape))
         	{
 				if (!isMenuOpen)
-					GetComponent<PopUpMenu>().Open();
+					GetComponent<PopUpMenu>().OpenMenu();
 				else
-					GetComponent<PopUpMenu>().Close();
-
-				isMenuOpen = !isMenuOpen;
-				GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
+					GetComponent<PopUpMenu>().CloseMenu();
 			}
+			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
+			GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
         }
     }
 
-	public void UpdatePlayerMovement() 
+	public void CalculatePlayerMovement() 
 	{
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0f)
@@ -72,6 +70,8 @@ public class PlayerScript : NetworkBehaviour
         Vector3 movementDirection = transform.right * x + transform.forward * y;
         Vector3 playerHorizontalMovement = movementDirection * movementSpeed * Time.deltaTime;
 
+		UpdatePlayerMovement(playerHorizontalMovement);
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
@@ -79,27 +79,29 @@ public class PlayerScript : NetworkBehaviour
         
         velocity.y += gravityForce * Time.deltaTime;
         Vector3 playerVerticalMovement = velocity * Time.deltaTime;
+		
+		UpdatePlayerMovement(playerVerticalMovement);
+	}
 
+	public void UpdatePlayerMovement(Vector3 playerMovement) {
         if (NetworkManager.Singleton.IsServer){
-            SubmitPositionToClientRpc(playerHorizontalMovement, playerVerticalMovement);
+            SubmitPositionToClientRpc(playerMovement);
         } else {
-            SubmitPositionToServerRpc(playerHorizontalMovement, playerVerticalMovement);
+            SubmitPositionToServerRpc(playerMovement);
         }
 	}
 
     [ServerRpc]
-    void SubmitPositionToServerRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ServerRpcParams rpcParams = default)
+    void SubmitPositionToServerRpc(Vector3 playerMovement = default, ServerRpcParams rpcParams = default)
     {
-        controller.Move(playerHorizontalMovement);
-        controller.Move(playerVerticalMovement);
+        controller.Move(playerMovement);
         Position.Value = controller.transform.position;
     }
 
     [ClientRpc]
-    void SubmitPositionToClientRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ClientRpcParams rpcParams = default)
+    void SubmitPositionToClientRpc(Vector3 playerMovement = default, ClientRpcParams rpcParams = default)
     {
-        controller.Move(playerHorizontalMovement);
-        controller.Move(playerVerticalMovement);
+        controller.Move(playerMovement);
         Position.Value = controller.transform.position;
         //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
     }

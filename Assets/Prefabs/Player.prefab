@@ -895,6 +895,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popUpMenu: {fileID: 5266154644742466247}
+  playerObject: {fileID: 3663755042480176250}
+  buddyButton: {fileID: 5194676365454597591}
+  buddy: {fileID: 0}
+  gdriveButton: {fileID: 3049075683487564167}
+  gdrive: {fileID: 0}
+  gscholarButton: {fileID: 4546230855934113775}
+  gscholar: {fileID: 0}
 --- !u!114 &2885023081715795645
 MonoBehaviour:
   m_ObjectHideFlags: 0

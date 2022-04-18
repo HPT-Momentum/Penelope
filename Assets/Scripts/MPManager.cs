@@ -38,7 +38,7 @@ using UnityEngine;
         static void SubmitNewPosition()
         {
         	foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds) {
-            	NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<PlayerScript>().UpdatePlayerMovement();
+            	NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<PlayerScript>().CalculatePlayerMovement();
             }
         }
     }
