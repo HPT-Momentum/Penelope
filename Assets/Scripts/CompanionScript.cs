@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class CompanionScript : InteractableObject
 {
-    public RectTransform dialogueBox;
     public string companionName;
 
     public override string GetDescription()
     {
-        if (!dialogueBox.gameObject.activeSelf) return $"Press [{key}] to talk to {companionName}";
-        return "";
+        return $"Press [{key}] to talk to {companionName}";
     }
     
-    public override void OnInteract()
+    public override void OnInteract(GameObject dialogueBox)
     {
-        if (!dialogueBox.gameObject.activeSelf) 
+        if (!dialogueBox.activeSelf) 
             dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
     }
 }

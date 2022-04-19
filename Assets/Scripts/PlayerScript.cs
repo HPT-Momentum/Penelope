@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
+using System;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : NetworkBehaviour
 {
     public float movementSpeed = 10f;
     public float jumpHeight = 5f;
@@ -10,22 +12,52 @@ public class PlayerScript : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-    
-    private CharacterController controller;
+
+	public GameObject playerCamera;
+	public GameObject playerHUD;
+
+    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+
+    public CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
-    
-    void Start()
+
+	private bool isMenuOpen = false;
+
+    public override void OnNetworkSpawn()
     {
-        controller = GetComponent<CharacterController>();
+        if (IsOwner)
+        {
+			// these objects need to be enabled for the specific player object
+            playerCamera.SetActive(true);
+            playerHUD.SetActive(true);
+
+			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
+			foreach(Waypoint waypoint in waypoints)
+				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
+        }
     }
 
     void Update()
     {
-		UpdatePlayerMovement();
+        if (IsOwner)
+        {
+            CalculatePlayerMovement();
+            transform.position = Position.Value;
+
+			if (Input.GetKeyDown(KeyCode.Escape))
+        	{
+				if (!isMenuOpen)
+					GetComponent<PopUpMenu>().OpenMenu();
+				else
+					GetComponent<PopUpMenu>().CloseMenu();
+			}
+			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
+			GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
+        }
     }
 
-	private void UpdatePlayerMovement() 
+	public void CalculatePlayerMovement() 
 	{
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0f)
@@ -37,8 +69,9 @@ public class PlayerScript : MonoBehaviour
         float y = Input.GetAxis("Vertical");
 
         Vector3 movementDirection = transform.right * x + transform.forward * y;
+        Vector3 playerHorizontalMovement = movementDirection * movementSpeed * Time.deltaTime;
 
-        controller.Move(movementDirection * movementSpeed * Time.deltaTime);
+		UpdatePlayerMovement(playerHorizontalMovement);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -46,6 +79,37 @@ public class PlayerScript : MonoBehaviour
         }
         
         velocity.y += gravityForce * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        Vector3 playerVerticalMovement = velocity * Time.deltaTime;
+		
+		UpdatePlayerMovement(playerVerticalMovement);
 	}
+
+	public void UpdatePlayerMovement(Vector3 playerMovement) {
+        if (NetworkManager.Singleton.IsServer){
+            SubmitPositionToClientRpc(playerMovement);
+        } else {
+            SubmitPositionToServerRpc(playerMovement);
+        }
+	}
+
+    [ServerRpc]
+    void SubmitPositionToServerRpc(Vector3 playerMovement = default, ServerRpcParams rpcParams = default)
+    {
+        controller.Move(playerMovement);
+        Position.Value = controller.transform.position;
+    }
+
+    [ClientRpc]
+    void SubmitPositionToClientRpc(Vector3 playerMovement = default, ClientRpcParams rpcParams = default)
+    {
+        controller.Move(playerMovement);
+        try {
+        Position.Value = controller.transform.position;
+        }
+        catch {
+            // Otherwise keeps whining about not being able to write networkvariable, however it doesn't work without l107
+        }
+        //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
+        
+    }
 }
