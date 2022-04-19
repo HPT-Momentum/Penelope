@@ -20,12 +20,13 @@ public class PopUpMenu : MonoBehaviour
     void Start()
     {
         buddy = GameObject.Find("Buddy");
-        gdrive = GameObject.Find("GDrive");
-        gscholar = GameObject.Find("GScholar");
+        // TODO: find define objects for these buttons
+        // gdrive = GameObject.Find("");
+        // gscholar = GameObject.Find("");
         
         buddyButton.onClick.AddListener(() => TeleportPlayerToObject(buddy));
-        gdriveButton.onClick.AddListener(() => TeleportPlayerToObject(gdrive));
-        gscholarButton.onClick.AddListener(() => TeleportPlayerToObject(gscholar));
+        // gdriveButton.onClick.AddListener(() => TeleportPlayerToObject(gdrive));
+        // gscholarButton.onClick.AddListener(() => TeleportPlayerToObject(gscholar));
     }
     
     public void OpenMenu(){

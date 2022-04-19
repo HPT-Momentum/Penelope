@@ -11,9 +11,9 @@ public class CompanionScript : InteractableObject
         return $"Press [{key}] to talk to {companionName}";
     }
     
-    public override void OnInteract(GameObject playerObject)
+    public override void OnInteract(GameObject dialogueBox)
     {
-        if (!playerObject.GetComponent<PlayerInteraction>().dialogueBox.activeSelf) 
-            playerObject.GetComponent<PlayerInteraction>().dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
+        if (!dialogueBox.activeSelf) 
+            dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
     }
 }
