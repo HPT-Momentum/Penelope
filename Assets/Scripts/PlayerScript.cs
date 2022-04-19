@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using System;
 
 public class PlayerScript : NetworkBehaviour
 {
@@ -102,7 +103,13 @@ public class PlayerScript : NetworkBehaviour
     void SubmitPositionToClientRpc(Vector3 playerMovement = default, ClientRpcParams rpcParams = default)
     {
         controller.Move(playerMovement);
+        try {
         Position.Value = controller.transform.position;
+        }
+        catch {
+            // Otherwise keeps whining about not being able to write networkvariable, however it doesn't work without l107
+        }
         //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
+        
     }
 }
