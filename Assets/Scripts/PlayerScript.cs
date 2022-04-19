@@ -11,26 +11,29 @@ public class PlayerScript : NetworkBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-    
-    private CharacterController controller;
+
+	public GameObject playerCamera;
+	public GameObject playerHUD;
+
+    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+
+    public CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
 
-    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
-    
-    void Start()
-    {
-        controller = GetComponent<CharacterController>();
-    }
+	private bool isMenuOpen = false;
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
-            gameObject.GetComponentInChildren<Camera>().enabled = true;
-            gameObject.GetComponentInChildren<AudioListener>().enabled = true;
-            controller = GetComponent<CharacterController>();
-            UpdatePlayerMovement();
+			// these objects need to be enabled for the specific player object
+            playerCamera.SetActive(true);
+            playerHUD.SetActive(true);
+
+			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
+			foreach(Waypoint waypoint in waypoints)
+				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
         }
     }
 
@@ -38,13 +41,22 @@ public class PlayerScript : NetworkBehaviour
     {
         if (IsOwner)
         {
-            UpdatePlayerMovement();
-            // if(!NetworkManager.Singleton.IsServer)
+            CalculatePlayerMovement();
             transform.position = Position.Value;
+
+			if (Input.GetKeyDown(KeyCode.Escape))
+        	{
+				if (!isMenuOpen)
+					GetComponent<PopUpMenu>().OpenMenu();
+				else
+					GetComponent<PopUpMenu>().CloseMenu();
+			}
+			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
+			GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
         }
     }
 
-	public void UpdatePlayerMovement() 
+	public void CalculatePlayerMovement() 
 	{
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0f)
@@ -58,6 +70,8 @@ public class PlayerScript : NetworkBehaviour
         Vector3 movementDirection = transform.right * x + transform.forward * y;
         Vector3 playerHorizontalMovement = movementDirection * movementSpeed * Time.deltaTime;
 
+		UpdatePlayerMovement(playerHorizontalMovement);
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
@@ -65,34 +79,30 @@ public class PlayerScript : NetworkBehaviour
         
         velocity.y += gravityForce * Time.deltaTime;
         Vector3 playerVerticalMovement = velocity * Time.deltaTime;
+		
+		UpdatePlayerMovement(playerVerticalMovement);
+	}
 
+	public void UpdatePlayerMovement(Vector3 playerMovement) {
         if (NetworkManager.Singleton.IsServer){
-            controller.Move(playerHorizontalMovement);
-            controller.Move(playerVerticalMovement);
-            Position.Value = controller.transform.position;
-            SubmitPositionToClientRpc(playerHorizontalMovement, playerVerticalMovement);
+            SubmitPositionToClientRpc(playerMovement);
         } else {
-            SubmitPositionToServerRpc(playerHorizontalMovement, playerVerticalMovement);
+            SubmitPositionToServerRpc(playerMovement);
         }
-        
 	}
 
     [ServerRpc]
-    void SubmitPositionToServerRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ServerRpcParams rpcParams = default)
+    void SubmitPositionToServerRpc(Vector3 playerMovement = default, ServerRpcParams rpcParams = default)
     {
-        controller.Move(playerHorizontalMovement);
-        controller.Move(playerVerticalMovement);
+        controller.Move(playerMovement);
         Position.Value = controller.transform.position;
     }
 
     [ClientRpc]
-    void SubmitPositionToClientRpc(Vector3 playerHorizontalMovement = default, Vector3 playerVerticalMovement = default, ClientRpcParams rpcParams = default)
+    void SubmitPositionToClientRpc(Vector3 playerMovement = default, ClientRpcParams rpcParams = default)
     {
-		if(IsOwner) {
-        	controller.Move(playerHorizontalMovement);
-        	controller.Move(playerVerticalMovement);
-        	//Position.Value = controller.transform.position;
-        	//NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
-		}
+        controller.Move(playerMovement);
+        Position.Value = controller.transform.position;
+        //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
     }
 }
