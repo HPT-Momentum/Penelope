@@ -14,6 +14,6 @@ public class WebsiteOpenerScript : InteractableObject
     {
         Application.OpenURL(url);
 
-        return $"Je hebt {websiteName} gebruikt";
+        return $"Je hebt {websiteName} gebruikt om ";
     }
 }

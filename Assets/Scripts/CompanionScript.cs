@@ -16,6 +16,6 @@ public class CompanionScript : InteractableObject
         if (!dialogueBox.activeSelf) 
             dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
 
-        return $"Met {companionName} gepraat";
+        return $"Met {companionName} gepraat om ";
     }
 }
