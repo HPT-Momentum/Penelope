@@ -10,8 +10,10 @@ public class WebsiteOpenerScript : InteractableObject
         return $"Press [{key}] to open {websiteName}";
     }
 
-        public override void OnInteract(GameObject dialogueBox)
+        public override string OnInteract(GameObject dialogueBox)
     {
         Application.OpenURL(url);
+
+        return $"Je hebt {websiteName} gebruikt";
     }
 }

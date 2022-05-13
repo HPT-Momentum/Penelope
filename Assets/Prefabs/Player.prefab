@@ -804,6 +804,7 @@ Transform:
   - {fileID: 5265551163933691190}
   - {fileID: 3770075799224159726}
   - {fileID: 226907591611890743}
+  - {fileID: 4825966981449697187}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -865,6 +866,7 @@ MonoBehaviour:
   interactionDistance: 2
   interactionText: {fileID: 7872543007935900608}
   dialogueBox: {fileID: 1520452578946670230}
+  gameJournal: {fileID: 6542423295284265101}
   playerCamera: {fileID: 5839745155330342141}
 --- !u!114 &1219786442000177182
 MonoBehaviour:
@@ -897,11 +899,8 @@ MonoBehaviour:
   popUpMenu: {fileID: 5266154644742466247}
   playerObject: {fileID: 3663755042480176250}
   buddyButton: {fileID: 5194676365454597591}
-  buddy: {fileID: 0}
   gdriveButton: {fileID: 3049075683487564167}
-  gdrive: {fileID: 0}
   gscholarButton: {fileID: 4546230855934113775}
-  gscholar: {fileID: 0}
 --- !u!114 &2885023081715795645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1885,6 +1884,49 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &6542423295284265101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4825966981449697187}
+  - component: {fileID: 1329538053784303330}
+  m_Layer: 0
+  m_Name: GameJournal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4825966981449697187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6542423295284265101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4981720184560933054}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1329538053784303330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6542423295284265101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a714c7bcd9b3f1488cd279e1b553848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6951658367679562492
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ public class PlayerInteraction: MonoBehaviour {
 
     public TMPro.TextMeshProUGUI interactionText;
 	public GameObject dialogueBox;
+    public GameObject gameJournal;
 
     public Camera playerCamera;
     
@@ -44,7 +45,8 @@ public class PlayerInteraction: MonoBehaviour {
         switch (interactableObj.interactionType) {
             case InteractableObject.InteractionType.Click:
                 if (Input.GetKeyDown(interactableObj.key)) {
-                    interactableObj.OnInteract(dialogueBox);
+                    var interactionLog = interactableObj.OnInteract(dialogueBox);
+                    gameJournal.GetComponent<GameJournal>().addJournalLog(interactionLog);
                 }
                 break;
             
