@@ -17,6 +17,13 @@ public class PlayerScript : NetworkBehaviour
 	public GameObject playerHUD;
 
     public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+    
+    // Agora variables
+    public string agoraAppID;
+    public string channelName;
+    public string channelToken;
+    public uint playerUid;
+    public GameObject playerFace;
 
     public CharacterController controller;
     private Vector3 velocity;
@@ -26,13 +33,19 @@ public class PlayerScript : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
+	    if (IsOwner)
         {
+	        playerUid = Convert.ToUInt32(NetworkManager.Singleton.LocalClientId);
+	        
+	        // attach a video call script for the local player object
+	        var videoCallScript = gameObject.AddComponent<VideoCallScript>();
+	        videoCallScript.Setup(agoraAppID, channelName, channelToken, playerUid);
+	        
 			// these objects need to be enabled for the specific player object
             playerCamera.SetActive(true);
             playerHUD.SetActive(true);
 
-			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
+			Waypoint[] waypoints = FindObjectsOfType<Waypoint>();
 			foreach(Waypoint waypoint in waypoints)
 				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
         }
@@ -104,12 +117,11 @@ public class PlayerScript : NetworkBehaviour
     {
         controller.Move(playerMovement);
         try {
-        Position.Value = controller.transform.position;
+			Position.Value = controller.transform.position;
         }
         catch {
             // Otherwise keeps whining about not being able to write networkvariable, however it doesn't work without l107
         }
         //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
-        
     }
 }
