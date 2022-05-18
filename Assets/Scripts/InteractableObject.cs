@@ -15,7 +15,7 @@ public abstract class InteractableObject : MonoBehaviour
     public InteractionType interactionType;
 
     public abstract string GetDescription();
-    public abstract void OnInteract(GameObject dialogueBox);
+    public abstract string OnInteract(GameObject dialogueBox);
 
 	// methods for interaction type Hold
     public float GetHoldTime() => holdTime;

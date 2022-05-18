@@ -44,7 +44,8 @@ public class PlayerInteraction: MonoBehaviour {
         switch (interactableObj.interactionType) {
             case InteractableObject.InteractionType.Click:
                 if (Input.GetKeyDown(interactableObj.key)) {
-                    interactableObj.OnInteract(dialogueBox);
+                    var interactionLog = interactableObj.OnInteract(dialogueBox);
+                    GetComponent<GameJournal>().addJournalLog(interactionLog);
                 }
                 break;
             

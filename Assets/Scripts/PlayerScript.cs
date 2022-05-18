@@ -23,6 +23,7 @@ public class PlayerScript : NetworkBehaviour
     private bool isGrounded;
 
 	private bool isMenuOpen = false;
+    private bool isGameJournalOpen = false;
 
     public override void OnNetworkSpawn()
     {
@@ -54,6 +55,16 @@ public class PlayerScript : NetworkBehaviour
 			}
 			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
 			GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
+
+            if (Input.GetKeyDown(KeyCode.Keypad0))
+        	{
+				if (!isGameJournalOpen)
+					GetComponent<GameJournal>().OpenMenu();
+				else
+					GetComponent<GameJournal>().CloseMenu();
+			}
+			isGameJournalOpen = GetComponent<GameJournal>().gameJournalMenu.activeSelf;
+			GetComponent<PlayerCameraScript>().PauseMouse(isGameJournalOpen);
         }
     }
 
