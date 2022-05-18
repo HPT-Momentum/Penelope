@@ -15,8 +15,6 @@ public class GameJournal : MonoBehaviour
         log+= DateTime.Now;
 
         journalLogs.Add(log);
-
-        Debug.Log(log);
     }
     
     public void OpenMenu(){
