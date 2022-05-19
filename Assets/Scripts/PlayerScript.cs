@@ -31,12 +31,14 @@ public class PlayerScript : NetworkBehaviour
 
 	private bool isMenuOpen = false;
 
+	private List<uint> playerIds = new List<uint>();
+
     public override void OnNetworkSpawn()
     {
 	    if (IsOwner)
         {
 	        playerUid = Convert.ToUInt32(NetworkManager.Singleton.LocalClientId);
-	        
+
 	        // attach a video call script for the local player object
 	        var videoCallScript = gameObject.AddComponent<VideoCallScript>();
 	        videoCallScript.Setup(agoraAppID, channelName, channelToken, playerUid);
@@ -49,6 +51,23 @@ public class PlayerScript : NetworkBehaviour
 			foreach(Waypoint waypoint in waypoints)
 				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
         }
+	    else
+	    {
+		    while (true)
+		    {
+			    uint id = 0;
+			    
+			    if (!playerIds.Contains(id))
+			    {
+				    playerUid = id;
+				    break;
+			    }
+
+			    id++;
+		    }
+	    }
+	    
+	    playerIds.Add(playerUid);
     }
 
     void Update()

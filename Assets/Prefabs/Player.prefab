@@ -1089,7 +1089,7 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   agoraAppID: 00d0c196da9541e696dfa46a5fcadc96
   channelName: test
-  channelToken: 00600d0c196da9541e696dfa46a5fcadc96IABhPOYGAohmBCCBgFiV1A0hOb/WRREohJvghZfdTPp9dgx+f9gAAAAAEAB+8cTOS9iEYgEAAQBL2IRi
+  channelToken: 00600d0c196da9541e696dfa46a5fcadc96IAAa0BdJEBczWTV2GF+29A0FUuv276ihLsI3ZyRJjebLWAx+f9gAAAAAEABGv362kYGHYgEAAQCRgYdi
   playerUid: 0
   playerFace: {fileID: 2863716068973780076}
   controller: {fileID: 7179592346772019537}
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3905934010
+  GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
