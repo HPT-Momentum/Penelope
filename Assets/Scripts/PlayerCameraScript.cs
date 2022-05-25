@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,6 +8,7 @@ public class PlayerCameraScript : NetworkBehaviour
     public Transform playerCamera;
 
     private float xRotation = 0f;
+    private NetworkVariable<Vector3> playerRotation = new NetworkVariable<Vector3>();
 	private bool isMenuOpen = false;
     
     void Start()
@@ -33,8 +32,12 @@ public class PlayerCameraScript : NetworkBehaviour
 		    xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
 		    playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-		    playerObject.transform.Rotate(Vector3.up * mouseX);
+		    
+		    var newPlayerRotation = Vector3.up * mouseX;
+		    SubmitRotationToServerRpc(newPlayerRotation);
 	    }
+	    
+	    playerObject.transform.Rotate(playerRotation.Value);
     }
 
 	public void PauseMouse(bool isMenuOpen) {
@@ -44,5 +47,11 @@ public class PlayerCameraScript : NetworkBehaviour
         	Cursor.lockState = CursorLockMode.None;
 		else
         	Cursor.lockState = CursorLockMode.Locked;
+	}
+
+	[ServerRpc]
+	void SubmitRotationToServerRpc(Vector3 newPlayerRotation = default)
+	{ 
+		playerRotation.Value = newPlayerRotation;
 	}
 }

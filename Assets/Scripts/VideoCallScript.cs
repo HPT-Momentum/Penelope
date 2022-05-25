@@ -1,24 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using agora_gaming_rtc;
-using UnityEngine.UI;
 
 public class VideoCallScript : MonoBehaviour
 {
     private string channelName;
     private string channelToken;
-    private uint playerUid;
     
     private IRtcEngine mRtcEngine;
 
-    public void Setup(string agoraAppID, string channelName, string channelToken, uint playerUid)
+    public void Setup(string agoraAppID, string channelName, string channelToken)
     {
         this.channelName = channelName;
         this.channelToken = channelToken;
-        this.playerUid = playerUid;
         
         mRtcEngine = IRtcEngine.GetEngine(agoraAppID);
 
@@ -26,11 +19,9 @@ public class VideoCallScript : MonoBehaviour
         mRtcEngine.OnUserOffline = OnUserOffline;
         mRtcEngine.OnJoinChannelSuccess = OnJoinChannelSuccessHandler;
         mRtcEngine.OnLeaveChannel = OnLeaveChannelHandler;
-
-        Join();
     }
 
-    void Join()
+    public void Join(uint playerUid)
     {
         mRtcEngine.EnableVideo();
         mRtcEngine.EnableVideoObserver();
@@ -65,12 +56,14 @@ public class VideoCallScript : MonoBehaviour
 
     void OnUserJoined(uint agoraUid, int elapsed)
     {
+        Debug.Log($"New player joined Agora chat with id {agoraUid}");
         PlayerScript[] players = FindObjectsOfType<PlayerScript>();
         
         foreach (PlayerScript player in players)
         {
+            Debug.Log($"Checking player with id {player.playerUid.Value}");
             // the agoraUid cannot be 0 so the playerUid is incremented with 1
-            if (player.playerUid+1 == agoraUid)
+            if (player.playerUid.Value+1 == agoraUid)
             {
                 if (player.playerFace.GetComponent<VideoSurface>() == null)
                 {
@@ -79,6 +72,8 @@ public class VideoCallScript : MonoBehaviour
                     remoteView.SetEnable(true);
                     remoteView.SetVideoSurfaceType(AgoraVideoSurfaceType.Renderer);
                     remoteView.SetGameFps(30);
+                    
+                    Debug.Log($"VideoSurface added to player {player.playerUid.Value}");
                 }
             }
         }
@@ -90,7 +85,7 @@ public class VideoCallScript : MonoBehaviour
         
         foreach (PlayerScript player in players)
         {
-            if (player.playerUid == uid)
+            if (player.playerUid.Value == uid)
             {
                 VideoSurface remoteView = player.playerFace.GetComponent<VideoSurface>();
                 remoteView.SetEnable(false);

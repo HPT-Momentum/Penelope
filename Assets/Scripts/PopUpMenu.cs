@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +37,7 @@ public class PopUpMenu : MonoBehaviour
     private void TeleportPlayerToObject(GameObject targetObject)
     {
         var offset = targetObject.transform.position - playerObject.transform.position;
-        playerObject.GetComponent<PlayerScript>().UpdatePlayerMovement(offset);
+        playerObject.GetComponent<PlayerScript>().SubmitMovementToServerRpc(offset);
         
         CloseMenu();
     }
