@@ -56,12 +56,10 @@ public class VideoCallScript : MonoBehaviour
 
     void OnUserJoined(uint agoraUid, int elapsed)
     {
-        Debug.Log($"New player joined Agora chat with id {agoraUid}");
         PlayerScript[] players = FindObjectsOfType<PlayerScript>();
         
         foreach (PlayerScript player in players)
         {
-            Debug.Log($"Checking player with id {player.playerUid.Value}");
             // the agoraUid cannot be 0 so the playerUid is incremented with 1
             if (player.playerUid.Value+1 == agoraUid)
             {
@@ -72,8 +70,6 @@ public class VideoCallScript : MonoBehaviour
                     remoteView.SetEnable(true);
                     remoteView.SetVideoSurfaceType(AgoraVideoSurfaceType.Renderer);
                     remoteView.SetGameFps(30);
-                    
-                    Debug.Log($"VideoSurface added to player {player.playerUid.Value}");
                 }
             }
         }
