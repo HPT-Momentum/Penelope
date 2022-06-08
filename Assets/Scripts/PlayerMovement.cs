@@ -36,15 +36,15 @@ public class PlayerMovement : NetworkBehaviour
 
         if (playerMovement.Value != Vector3.zero)
         {
-            controller.Move(playerMovement.Value);
+            controller.SimpleMove(playerMovement.Value);
         }
     }
     
     public void CalculatePlayerMovement() 
     {
-        Vector3 verticalDirection = transform.TransformDirection(Vector3.forward);
+        Vector3 verticalDirection = transform.forward;
         float verticalInput = Input.GetAxis("Vertical");
-        Vector3 horizontalDirection = transform.TransformDirection(Vector3.right);
+        Vector3 horizontalDirection = transform.right;
         float horizontalInput = Input.GetAxis("Horizontal");
         Vector3 playerHorizontalMovement = (verticalDirection * verticalInput + horizontalDirection * horizontalInput) * movementSpeed;
         

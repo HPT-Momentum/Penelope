@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerCameraScript : NetworkBehaviour
 {
     public float mouseSensitivity = 150f;
-    public Transform playerObject;
     public Transform playerCamera;
 
     private float xRotation = 0f;
@@ -45,7 +44,7 @@ public class PlayerCameraScript : NetworkBehaviour
 
 	    if (playerRotation.Value != Vector3.zero)
 	    {
-		    playerObject.transform.Rotate(playerRotation.Value);
+		    transform.Rotate(playerRotation.Value);
 	    }
     }
 

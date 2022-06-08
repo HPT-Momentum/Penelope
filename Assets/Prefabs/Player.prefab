@@ -1148,7 +1148,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 200
-  playerObject: {fileID: 4981720184560933054}
   playerCamera: {fileID: 91659527143347993}
 --- !u!114 &-3860747992733695783
 MonoBehaviour:
@@ -1162,7 +1161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb2f1a8867e248338b86fbd12846928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 0.5
+  movementSpeed: 10
   playerMovement:
     m_InternalValue: {x: 0, y: 0, z: 0}
   gravityForce: -9.81
