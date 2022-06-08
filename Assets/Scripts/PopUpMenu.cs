@@ -37,7 +37,7 @@ public class PopUpMenu : MonoBehaviour
     private void TeleportPlayerToObject(GameObject targetObject)
     {
         var offset = targetObject.transform.position - playerObject.transform.position;
-        playerObject.GetComponent<PlayerScript>().SubmitMovementToServerRpc(offset);
+        playerObject.GetComponent<PlayerMovement>().SubmitMovementToServerRpc(offset);
         
         CloseMenu();
     }

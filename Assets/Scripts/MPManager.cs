@@ -34,11 +34,4 @@ using UnityEngine;
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
             GUILayout.Label("Mode: " + mode);
         }
-
-        static void SubmitNewPosition()
-        {
-        	foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds) {
-            	NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<PlayerScript>().CalculatePlayerMovement();
-            }
-        }
     }

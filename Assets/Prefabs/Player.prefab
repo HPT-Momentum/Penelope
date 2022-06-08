@@ -1021,6 +1021,7 @@ GameObject:
   - component: {fileID: 1219786442000177182}
   - component: {fileID: 6098427982531645700}
   - component: {fileID: 2885023081715795645}
+  - component: {fileID: -3860747992733695783}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1076,26 +1077,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8861058d2774a1895465406f15097e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  jumpHeight: 5
-  gravityForce: -9.81
-  groundCheck: {fileID: 3770075799224159726}
-  groundDistance: 0.4
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
   playerCamera: {fileID: 6018542877046342488}
   playerHUD: {fileID: 6951658367679562492}
-  position:
-    m_InternalValue: {x: 0, y: 0, z: 0}
   playerUid:
     m_InternalValue: 0
   agoraAppID: 00d0c196da9541e696dfa46a5fcadc96
   channelName: test
-  channelToken: 00600d0c196da9541e696dfa46a5fcadc96IADD6pjfKyKhW+EsBPzwHjrswiEat6yi84Pv4WjAEjDjuQx+f9gAAAAAEADTxV3AFD2OYgEAAQAUPY5i
+  channelToken: 00600d0c196da9541e696dfa46a5fcadc96IABk3vH3FvMHAAYHF0qDGkZABuywbecX+cFpYnRkiFVJRQx+f9gAAAAAEADBxArjMxqbYgEAAQAzGpti
   playerFace: {fileID: 2863716068973780076}
   playerIdText: {fileID: 5733842432808810764}
-  controller: {fileID: 7179592346772019537}
 --- !u!114 &6001977951856225036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1160,6 +1150,27 @@ MonoBehaviour:
   mouseSensitivity: 200
   playerObject: {fileID: 4981720184560933054}
   playerCamera: {fileID: 91659527143347993}
+--- !u!114 &-3860747992733695783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3663755042480176250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb2f1a8867e248338b86fbd12846928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 0.5
+  playerMovement:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  gravityForce: -9.81
+  groundCheck: {fileID: 3770075799224159726}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &3916553334465901466
 GameObject:
   m_ObjectHideFlags: 0

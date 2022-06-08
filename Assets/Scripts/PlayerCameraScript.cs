@@ -10,6 +10,7 @@ public class PlayerCameraScript : NetworkBehaviour
     private float xRotation = 0f;
     private NetworkVariable<Vector3> playerRotation = new NetworkVariable<Vector3>();
 	private bool isMenuOpen = false;
+	private Vector3 oldPlayerRotation = Vector3.zero;
     
     void Start()
     {
@@ -19,7 +20,7 @@ public class PlayerCameraScript : NetworkBehaviour
     // updates the camera angle per frame according to the mouse axis'
     void Update()
     {
-	    if (IsOwner)
+	    if (IsClient && IsOwner)
 	    {
 		    // don't update the camera if the menu is open
 		    if (isMenuOpen)
@@ -34,10 +35,18 @@ public class PlayerCameraScript : NetworkBehaviour
 		    playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 		    
 		    var newPlayerRotation = Vector3.up * mouseX;
-		    SubmitRotationToServerRpc(newPlayerRotation);
+		    
+		    if (oldPlayerRotation != newPlayerRotation)
+		    {
+			    oldPlayerRotation = newPlayerRotation;
+			    SubmitRotationToServerRpc(newPlayerRotation);
+		    }
 	    }
-	    
-	    playerObject.transform.Rotate(playerRotation.Value);
+
+	    if (playerRotation.Value != Vector3.zero)
+	    {
+		    playerObject.transform.Rotate(playerRotation.Value);
+	    }
     }
 
 	public void PauseMouse(bool isMenuOpen) {
