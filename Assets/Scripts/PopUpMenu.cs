@@ -8,24 +8,28 @@ public class PopUpMenu : MonoBehaviour
     public GameObject popUpMenu;
     public GameObject playerObject;
 
-    public Button buddyButton;
-    public Button gdriveButton;
-    public Button gscholarButton;
+    public Button museumButton;
+    public Button forumButton;
+    public Button stageButton;
+    public Button spaceshipButton;
     
-    private GameObject buddy;
-    private GameObject gdrive;
-    private GameObject gscholar;
+    private GameObject museum;
+    private GameObject forum;
+    private GameObject stage;
+    private GameObject spaceship;
     
 
     void Start()
     {
-        buddy = GameObject.Find("Buddy");
-        gdrive = GameObject.Find("GDrive");
-        gscholar = GameObject.Find("GScholar");
+        museum = GameObject.Find("MuseumPortalAnchor");
+        forum = GameObject.Find("ForumPortalAnchor");
+        stage = GameObject.Find("StagePortalAnchor");
+        spaceship = GameObject.Find("SpaceshipPortalAnchor");
         
-        buddyButton.onClick.AddListener(() => TeleportPlayerToObject(buddy));
-        gdriveButton.onClick.AddListener(() => TeleportPlayerToObject(gdrive));
-        gscholarButton.onClick.AddListener(() => TeleportPlayerToObject(gscholar));
+        museumButton.onClick.AddListener(() => TeleportPlayerToObject(museum));
+        forumButton.onClick.AddListener(() => TeleportPlayerToObject(forum));
+        stageButton.onClick.AddListener(() => TeleportPlayerToObject(stage));
+        spaceshipButton.onClick.AddListener(() => TeleportPlayerToObject(spaceship));
     }
     
     public void OpenMenu(){

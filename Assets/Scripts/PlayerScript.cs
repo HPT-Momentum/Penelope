@@ -54,10 +54,10 @@ public class PlayerScript : NetworkBehaviour
 					GetComponent<PopUpMenu>().OpenMenu();
 				else
 					GetComponent<PopUpMenu>().CloseMenu();
-			}
-			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
-			GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
+            }
 
+			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
+			
             if (Input.GetKeyDown(KeyCode.Keypad0))
         	{
 				if (!isGameJournalOpen)
@@ -65,8 +65,13 @@ public class PlayerScript : NetworkBehaviour
 				else
 					GetComponent<GameJournal>().CloseMenu();
 			}
-			isGameJournalOpen = GetComponent<GameJournal>().gameJournalMenu.activeSelf;
-			GetComponent<PlayerCameraScript>().PauseMouse(isGameJournalOpen);
+
+            isGameJournalOpen = GetComponent<GameJournal>().gameJournalMenu.activeSelf;
+            
+            if (isMenuOpen || isGameJournalOpen)
+				GetComponent<PlayerCameraScript>().PauseMouse(true);
+            else
+	            GetComponent<PlayerCameraScript>().PauseMouse(false);
         }
     }
 
