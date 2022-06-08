@@ -33,9 +33,11 @@ public class PlayerScript : NetworkBehaviour
             playerCamera.SetActive(true);
             playerHUD.SetActive(true);
 
-			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
-			foreach(Waypoint waypoint in waypoints)
+			Waypoint[] waypoints = FindObjectsOfType<Waypoint>();
+			foreach (Waypoint waypoint in waypoints)
+			{
 				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
+			}
         }
     }
 
@@ -122,5 +124,10 @@ public class PlayerScript : NetworkBehaviour
         }
         //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
         
+    }
+
+    public void TeleportToPosition(Vector3 position)
+    {
+	    transform.position = position;
     }
 }

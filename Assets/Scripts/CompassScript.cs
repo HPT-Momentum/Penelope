@@ -10,6 +10,7 @@ public class CompassScript : MonoBehaviour
     
     public GameObject waypointPrefab;
     public List<Waypoint> waypoints = new List<Waypoint>();
+    public float waypointVisibilityDistance = 60f;
     private float compassIncrement;
 
     void Start()
@@ -23,6 +24,15 @@ public class CompassScript : MonoBehaviour
 
         foreach (Waypoint waypoint in waypoints) {
             waypoint.image.rectTransform.anchoredPosition = GetPositionOnCompass(waypoint);
+            
+            float distance = Vector3.Distance(waypoint.transform.position, player.transform.position);
+            
+            waypoint.image.enabled = false;
+            // only show waypoints if the player is close enough
+            if (distance < waypointVisibilityDistance)
+            {
+                waypoint.image.enabled = true;
+            }
         }
     }
 
