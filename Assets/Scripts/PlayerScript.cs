@@ -58,7 +58,7 @@ public class PlayerScript : NetworkBehaviour
 
 			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
 			
-            if (Input.GetKeyDown(KeyCode.Keypad0))
+            if (Input.GetKeyDown(KeyCode.J))
         	{
 				if (!isGameJournalOpen)
 					GetComponent<GameJournal>().OpenMenu();
