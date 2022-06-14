@@ -33,9 +33,11 @@ public class PlayerScript : NetworkBehaviour
             playerCamera.SetActive(true);
             playerHUD.SetActive(true);
 
-			Waypoint[] waypoints = GameObject.FindObjectsOfType<Waypoint>();
-			foreach(Waypoint waypoint in waypoints)
+			Waypoint[] waypoints = FindObjectsOfType<Waypoint>();
+			foreach (Waypoint waypoint in waypoints)
+			{
 				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
+			}
         }
     }
 
@@ -52,19 +54,24 @@ public class PlayerScript : NetworkBehaviour
 					GetComponent<PopUpMenu>().OpenMenu();
 				else
 					GetComponent<PopUpMenu>().CloseMenu();
-			}
-			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
-			GetComponent<PlayerCameraScript>().PauseMouse(isMenuOpen);
+            }
 
-            if (Input.GetKeyDown(KeyCode.Keypad0))
+			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
+			
+            if (Input.GetKeyDown(KeyCode.J))
         	{
 				if (!isGameJournalOpen)
 					GetComponent<GameJournal>().OpenMenu();
 				else
 					GetComponent<GameJournal>().CloseMenu();
 			}
-			isGameJournalOpen = GetComponent<GameJournal>().gameJournalMenu.activeSelf;
-			GetComponent<PlayerCameraScript>().PauseMouse(isGameJournalOpen);
+
+            isGameJournalOpen = GetComponent<GameJournal>().gameJournalMenu.activeSelf;
+            
+            if (isMenuOpen || isGameJournalOpen)
+				GetComponent<PlayerCameraScript>().PauseMouse(true);
+            else
+	            GetComponent<PlayerCameraScript>().PauseMouse(false);
         }
     }
 
@@ -122,5 +129,10 @@ public class PlayerScript : NetworkBehaviour
         }
         //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
         
+    }
+
+    public void TeleportToPosition(Vector3 position)
+    {
+	    transform.position = position;
     }
 }

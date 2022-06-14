@@ -43,8 +43,18 @@ public class PlayerInteraction: MonoBehaviour {
         // depending on what interaction type the object has, perform the interaction
         switch (interactableObj.interactionType) {
             case InteractableObject.InteractionType.Click:
-                if (Input.GetKeyDown(interactableObj.key)) {
-                    var interactionLog = interactableObj.OnInteract(dialogueBox);
+                if (Input.GetKeyDown(interactableObj.key))
+                {
+                    string interactionLog;
+                    if (interactableObj is CompanionScript)
+                    {
+                        interactionLog = interactableObj.OnInteract(dialogueBox);
+                    }
+                    else
+                    {
+                        interactionLog = interactableObj.OnInteract(gameObject);
+                    }
+                    
                     GetComponent<GameJournal>().addJournalLog(interactionLog);
                 }
                 break;
