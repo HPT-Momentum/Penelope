@@ -15,6 +15,6 @@ public class PortalScript : InteractableObject
         // update the player position to the object
         playerObject.GetComponent<PlayerScript>().TeleportToPosition(targetPosition.transform.position);
 
-        return $"Je bent naar {destinationName} geweest om ";
+        return destinationName;
     }
 }

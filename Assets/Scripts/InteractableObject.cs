@@ -5,7 +5,8 @@ public abstract class InteractableObject : MonoBehaviour
     // set the key that is used to interact with the object
     public KeyCode key = KeyCode.E;
 
-    public enum InteractionType {
+    public enum InteractionType
+    {
         Click,
         Hold
     }
