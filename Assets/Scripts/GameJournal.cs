@@ -3,32 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+public struct GameJournalItem
+{
+    public DateTime datetime;
+    public string action;
+    public string actionSentence;
+    public GameJournalItem(string action, string actionSentenceStart)
+    {
+        this.datetime = DateTime.Now;
+        this.action = action;
+        this.actionSentence = $"{actionSentenceStart}{this.datetime}";
+    }
 
+    public string toString()
+    {
+        return $"{this.datetime}: {this.action}";
+    }
+}
 public class GameJournal : MonoBehaviour
 {
     public GameObject gameJournalMenu;
     public Text gameJournalText;
 
-    List<string> journalLogs = new List<string>();
+    List<GameJournalItem> journalLogs = new List<GameJournalItem>();
+    public GameJournalItem lastAction;
 
-    public void addJournalLog (string log){
-        log+= DateTime.Now;
+    public void addJournalLog(string action, string actionSentenceStart)
+    {
+        GameJournalItem gji = new GameJournalItem(action, actionSentenceStart);
 
-        journalLogs.Add(log);
+
+        journalLogs.Add(gji);
+        lastAction = gji;
     }
-    
-    public void OpenMenu(){
+
+    public void OpenMenu()
+    {
         gameJournalText.text = "";
         gameJournalMenu.SetActive(true);
 
-        var reverseList = new List<string>(journalLogs);
+        var reverseList = new List<GameJournalItem>(journalLogs);
         reverseList.Reverse();
-        foreach (string log in reverseList) {
-            gameJournalText.text += log + "\n";
+        foreach (GameJournalItem gi in reverseList)
+        {
+            gameJournalText.text += gi.actionSentence + "\n";
         }
     }
-    
-    public void CloseMenu(){
+
+    public void CloseMenu()
+    {
         gameJournalMenu.SetActive(false);
     }
 }
