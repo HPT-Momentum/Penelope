@@ -8,16 +8,13 @@ public struct GameJournalItem
     public DateTime datetime;
     public string action;
     public string actionSentence;
+    public string actionSentenceStart;
     public GameJournalItem(string action, string actionSentenceStart)
     {
         this.datetime = DateTime.Now;
         this.action = action;
-        this.actionSentence = $"{actionSentenceStart}{this.datetime}";
-    }
-
-    public string toString()
-    {
-        return $"{this.datetime}: {this.action}";
+        this.actionSentence = $"{actionSentenceStart} om {this.datetime}";
+        this.actionSentenceStart = actionSentenceStart;
     }
 }
 public class GameJournal : MonoBehaviour

@@ -61,18 +61,18 @@ public class PlayerInteraction : MonoBehaviour
                         Debug.Log(asd);
                         GameJournal gj = GetComponent<GameJournal>();
                         action = asd.OnInteract(dialogueBox, gj);
-                        actionSentenceStart = $"Gepraat met {action} om ";
+                        actionSentenceStart = $"Gepraat met {action}";
                     }
                     else
                     {
                         action = interactableObj.OnInteract(gameObject);
                         if (interactableObj is PortalScript)
                         {
-                            actionSentenceStart = $"Portal naar {action} genomen om ";
+                            actionSentenceStart = $"Portal naar {action} genomen";
                         }
                         else // if is website opener, because its the only one left. Yikes code.
                         {
-                            actionSentenceStart = $"Gewerkt met tool {action} om ";
+                            actionSentenceStart = $"Gewerkt met tool {action}";
                         }
                     }
 

@@ -26,9 +26,14 @@ public class CompanionScript : InteractableObject
                 // dialogueBox.GetComponent<DialogueScript>().contentTextComponent.text = "tesdsdasdadasd dsadsad";
                 // dialogueBox.GetComponent<DialogueScript>().lines = gameJournal.journalLogs.ToArray();
                 GameJournalItem lastAction = gj.lastAction;
-                dialogueBox.GetComponent<DialogueScript>().lines = new[] { $"{lastAction.actionSentence}, hoe was het?" };
+                dialogueBox.GetComponent<DialogueScript>().lines = new[] { $"{lastAction.actionSentenceStart}, in de engage zone kan je dit bespreken met teamgenoten!" };
 
                 // dialogueBox.GetComponent<DialogueScript>().lines = new[] { "xddd", "tsdasdadasdw dwd asdc asd" };
+            }
+            else if (companionName.ToLower().Contains("dummy"))
+            {
+                dialogueBox.GetComponent<DialogueScript>().lines = new[] { $"Begin bij de investigate zone!" };
+
             }
         dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
 
