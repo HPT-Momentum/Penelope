@@ -28,14 +28,15 @@ public class PlayerInteraction: MonoBehaviour {
 				if (!dialogueBox.activeSelf)
                 	interactionText.text = interactableObj.GetDescription();
 				else
-            		interactionText.text = "";
+            		interactionText.text = "+";
 
 				successfulHit = true;
             }
         }
 
         if (!successfulHit) {
-            interactionText.text = "";
+            // set the interaction text back to the crosshair
+            interactionText.text = "+";
         }
     }
 

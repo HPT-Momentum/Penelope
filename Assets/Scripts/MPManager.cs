@@ -12,7 +12,7 @@ using UnityEngine;
             }
             else
             {
-                StatusLabels();
+                //StatusLabels();
             }
 
             GUILayout.EndArea();
