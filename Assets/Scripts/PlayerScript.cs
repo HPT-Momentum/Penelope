@@ -13,8 +13,8 @@ public class PlayerScript : NetworkBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
-	public GameObject playerCamera;
-	public GameObject playerHUD;
+    public GameObject playerCamera;
+    public GameObject playerHUD;
 
     public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
 
@@ -22,22 +22,25 @@ public class PlayerScript : NetworkBehaviour
     private Vector3 velocity;
     private bool isGrounded;
 
-	private bool isMenuOpen = false;
+    private bool isMenuOpen = false;
     private bool isGameJournalOpen = false;
+
+    protected KeyCode TPMenuKey = KeyCode.Escape;
+    protected KeyCode GameJournalMenuKey = KeyCode.Tab;
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
-			// these objects need to be enabled for the specific player object
+            // these objects need to be enabled for the specific player object
             playerCamera.SetActive(true);
             playerHUD.SetActive(true);
 
-			Waypoint[] waypoints = FindObjectsOfType<Waypoint>();
-			foreach (Waypoint waypoint in waypoints)
-			{
-				GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
-			}
+            Waypoint[] waypoints = FindObjectsOfType<Waypoint>();
+            foreach (Waypoint waypoint in waypoints)
+            {
+                GetComponentInChildren<CompassScript>().AddWaypoint(waypoint);
+            }
         }
     }
 
@@ -48,67 +51,71 @@ public class PlayerScript : NetworkBehaviour
             CalculatePlayerMovement();
             transform.position = Position.Value;
 
-			if (Input.GetKeyDown(KeyCode.Escape))
-        	{
-				if (!isMenuOpen)
-					GetComponent<PopUpMenu>().OpenMenu();
-				else
-					GetComponent<PopUpMenu>().CloseMenu();
+            if (Input.GetKeyDown(TPMenuKey))
+            {
+                if (!isMenuOpen)
+                    GetComponent<PopUpMenu>().OpenMenu();
+                else
+                    GetComponent<PopUpMenu>().CloseMenu();
             }
 
-			isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
-			
-            if (Input.GetKeyDown(KeyCode.J))
-        	{
-				if (!isGameJournalOpen)
-					GetComponent<GameJournal>().OpenMenu();
-				else
-					GetComponent<GameJournal>().CloseMenu();
-			}
+            isMenuOpen = GetComponent<PopUpMenu>().popUpMenu.activeSelf;
+
+            if (Input.GetKeyDown(GameJournalMenuKey))
+            {
+                if (!isGameJournalOpen)
+                    GetComponent<GameJournal>().OpenMenu();
+                else
+                    GetComponent<GameJournal>().CloseMenu();
+            }
 
             isGameJournalOpen = GetComponent<GameJournal>().gameJournalMenu.activeSelf;
-            
+
             if (isMenuOpen || isGameJournalOpen)
-				GetComponent<PlayerCameraScript>().PauseMouse(true);
+                GetComponent<PlayerCameraScript>().PauseMouse(true);
             else
-	            GetComponent<PlayerCameraScript>().PauseMouse(false);
+                GetComponent<PlayerCameraScript>().PauseMouse(false);
         }
     }
 
-	public void CalculatePlayerMovement() 
-	{
+    public void CalculatePlayerMovement()
+    {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0f)
         {
             velocity.y = 0f;
         }
-        
+
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
 
         Vector3 movementDirection = transform.right * x + transform.forward * y;
         Vector3 playerHorizontalMovement = movementDirection * movementSpeed * Time.deltaTime;
 
-		UpdatePlayerMovement(playerHorizontalMovement);
+        UpdatePlayerMovement(playerHorizontalMovement);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
         }
-        
+
         velocity.y += gravityForce * Time.deltaTime;
         Vector3 playerVerticalMovement = velocity * Time.deltaTime;
-		
-		UpdatePlayerMovement(playerVerticalMovement);
-	}
 
-	public void UpdatePlayerMovement(Vector3 playerMovement) {
-        if (NetworkManager.Singleton.IsServer){
+        UpdatePlayerMovement(playerVerticalMovement);
+    }
+
+    public void UpdatePlayerMovement(Vector3 playerMovement)
+    {
+        if (NetworkManager.Singleton.IsServer)
+        {
             SubmitPositionToClientRpc(playerMovement);
-        } else {
+        }
+        else
+        {
             SubmitPositionToServerRpc(playerMovement);
         }
-	}
+    }
 
     [ServerRpc]
     void SubmitPositionToServerRpc(Vector3 playerMovement = default, ServerRpcParams rpcParams = default)
@@ -121,18 +128,20 @@ public class PlayerScript : NetworkBehaviour
     void SubmitPositionToClientRpc(Vector3 playerMovement = default, ClientRpcParams rpcParams = default)
     {
         controller.Move(playerMovement);
-        try {
-        Position.Value = controller.transform.position;
+        try
+        {
+            Position.Value = controller.transform.position;
         }
-        catch {
+        catch
+        {
             // Otherwise keeps whining about not being able to write networkvariable, however it doesn't work without l107
         }
         //NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerScript>().Position.Value = Position.Value; Werkt niet, had verwacht van wel
-        
+
     }
 
     public void TeleportToPosition(Vector3 position)
     {
-	    transform.position = position;
+        transform.position = position;
     }
 }
