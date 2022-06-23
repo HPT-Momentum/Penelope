@@ -8,7 +8,7 @@ public class CompanionScript : InteractableObject
 
     public override string GetDescription()
     {
-        return $"Press [{key}] to talk to {companionName}";
+        return $"Druk op [{key}] om met {companionName} te praten";
     }
 
     public override string OnInteract(GameObject dialogueBox)
@@ -32,7 +32,7 @@ public class CompanionScript : InteractableObject
             }
             else if (companionName.ToLower().Contains("dummy"))
             {
-                dialogueBox.GetComponent<DialogueScript>().lines = new[] { $"Begin bij de investigate zone!" };
+                dialogueBox.GetComponent<DialogueScript>().lines = new[] { $"Begin bij de engage (rode) zone!" };
 
             }
         dialogueBox.GetComponent<DialogueScript>().StartDialogue(companionName);
