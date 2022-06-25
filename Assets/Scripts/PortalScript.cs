@@ -7,7 +7,7 @@ public class PortalScript : InteractableObject
 
     public override string GetDescription()
     {
-        return $"Press [{key}] to go to {destinationName}";
+        return $"Druk op [{key}] om naar {destinationName} te gaan";
     }
 
     public override string OnInteract(GameObject playerObject)

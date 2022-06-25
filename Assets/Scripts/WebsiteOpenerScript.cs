@@ -7,13 +7,14 @@ public class WebsiteOpenerScript : InteractableObject
 
     public override string GetDescription()
     {
-        return $"Press [{key}] to open {websiteName}";
+        return $"Druk op [{key}] om {websiteName} te openen";
     }
 
-    public override string OnInteract(GameObject playerObject)
+        //Wanneer er geinteracteerd wordt met het GameObject open de URL en maak een log voor de game journal
+        public override string OnInteract(GameObject dialogueBox)
     {
         Application.OpenURL(url);
 
-        return websiteName;
+        return $"Je hebt {websiteName} gebruikt om ";
     }
 }
